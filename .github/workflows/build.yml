@@ -1,23 +1,23 @@
-name: 🚀 编译 (Build)
+name: 🚀 编译 PonWrt (Build PonWrt)
 
 on:
   workflow_dispatch:
     inputs:
       owner:
-        description: 'ImmortalWrt 仓库的拥有者 (Owner of ImmortalWrt repo)'
+        description: 'PonWrt 仓库的拥有者 (Owner of PonWrt repo)'
         type: string
         required: true
-        default: 'padavanonly'
+        default: 'pbs05'
       repo:
-        description: 'ImmortalWrt 仓库的名字 (Name of ImmortalWrt repo)'
+        description: 'PonWrt 仓库的名字 (Name of PonWrt repo)'
         type: string
         required: true
-        default: 'immortalwrtARM'
+        default: 'ponwrt'
       branch:
-        description: 'ImmortalWrt 仓库的分支 (Branch of ImmortalWrt repo)'
+        description: 'PonWrt 仓库的分支 (Branch of PonWrt repo)'
         type: string
         required: true
-        default: 'mt7986'
+        default: 'master'
       multithreading:
         description: '开启多线程编译 (Enable multithreading build)'
         type: boolean
@@ -31,7 +31,7 @@ jobs:
   build:
     if: ${{inputs.ssh == false}}
     runs-on: ubuntu-latest
-    name: 🚀 编译 (Build)
+    name: 🚀 编译 PonWrt (Build PonWrt)
     steps:
       - name: 下载编译所需的依赖 (Install the software packages required for compilation)
         run: |
@@ -41,56 +41,56 @@ jobs:
       - name: 克隆当前仓库 (Clone current repo)
         uses: actions/checkout@v4
 
-      - name: 克隆 ImmortalWrt 仓库 (Clone ImmortalWrt repo)
+      - name: 克隆 PonWrt 仓库 (Clone PonWrt repo)
         uses: actions/checkout@v4
         with:
           repository: '${{inputs.owner}}/${{inputs.repo}}'
           ref: ${{inputs.branch}}
-          path: ImmortalWrt
+          path: PonWrt
 
-      - name: 复制当前仓库的配置文件到 ImmortalWrt 仓库  (Copy current repo config to ImmortalWrt repo)
-        run: cp -f .config feeds.conf.default diy.sh ImmortalWrt/
+      - name: 复制当前仓库的配置文件到 PonWrt 仓库  (Copy current repo config to PonWrt repo)
+        run: cp -f .config feeds.conf.default diy.sh PonWrt/
 
       - name: 运行 diy.sh (Run diy.sh)
-        working-directory: ImmortalWrt
+        working-directory: PonWrt
         run: |
           chmod +x diy.sh
           ./diy.sh
 
       - name: 更新并下载 feeds (Update and download feeds)
-        working-directory: ImmortalWrt
+        working-directory: PonWrt
         run: ./scripts/feeds update -a && ./scripts/feeds install -a
 
-      - name: 再次复制当前仓库的配置文件到 ImmortalWrt 仓库 (Copy current repo config to ImmortalWrt repo again)
-        run: cp -f .config feeds.conf.default diy.sh ImmortalWrt/
+      - name: 再次复制当前仓库的配置文件到 PonWrt 仓库 (Copy current repo config to PonWrt repo again)
+        run: cp -f .config feeds.conf.default diy.sh PonWrt/
 
       - name: 编译前上传配置 (Upload config before build)
         uses: actions/upload-artifact@v4
         with:
           name: config-before-build
           path: |
-            ImmortalWrt/feeds.conf.default
-            ImmortalWrt/.config
+            PonWrt/feeds.conf.default
+            PonWrt/.config
 
-      - name: 多线程编译 ImmortalWrt (Build ImmortalWrt multithreading)
+      - name: 多线程编译 PonWrt (Build PonWrt multithreading)
         if: ${{inputs.multithreading == true}}
-        working-directory: ImmortalWrt
+        working-directory: PonWrt
         run: make -j$(nproc) V=s
 
-      - name: 单线程编译 ImmortalWrt (Build ImmortalWrt single thread)
+      - name: 单线程编译 PonWrt (Build PonWrt single thread)
         if: ${{inputs.multithreading == false}}
-        working-directory: ImmortalWrt
+        working-directory: PonWrt
         run: make -j1 V=s
 
       - name: 上传编译结果到 Artifact (Upload build result to Artifact)
         uses: actions/upload-artifact@v4
         with:
-          name: ImmortalWrt-build-result
-          path: ImmortalWrt/bin/targets
+          name: PonWrt-build-result
+          path: PonWrt/bin/targets
 
   build-ssh:
     if: ${{inputs.ssh == true}}
-    name: 🚀 编译 (Build) - SSH
+    name: 🚀 编译 PonWrt (Build PonWrt) - SSH
     runs-on: ubuntu-latest
     steps:
       - name: 下载编译所需的依赖 (Install the software packages required for compilation)
@@ -101,12 +101,12 @@ jobs:
       - name: 克隆当前仓库 (Clone current repo)
         uses: actions/checkout@v4
 
-      - name: 克隆 ImmortalWrt 仓库 (Clone ImmortalWrt repo)
+      - name: 克隆 PonWrt 仓库 (Clone PonWrt repo)
         uses: actions/checkout@v4
         with:
           repository: '${{inputs.owner}}/${{inputs.repo}}'
           ref: ${{inputs.branch}}
-          path: ImmortalWrt
+          path: PonWrt
 
       - name: 开启 SSH 服务 (Start SSH service)
         uses: lhotari/action-upterm@v1
@@ -123,21 +123,21 @@ jobs:
         with:
           name: config-before-build
           path: |
-            ImmortalWrt/feeds.conf.default
-            ImmortalWrt/.config
+            PonWrt/feeds.conf.default
+            PonWrt/.config
 
-      - name: 多线程编译 ImmortalWrt (Build ImmortalWrt multithreading)
+      - name: 多线程编译 PonWrt (Build PonWrt multithreading)
         if: ${{inputs.multithreading == true}}
-        working-directory: ImmortalWrt
+        working-directory: PonWrt
         run: make -j$(nproc) V=s
 
-      - name: 单线程编译 ImmortalWrt (Build ImmortalWrt single thread)
+      - name: 单线程编译 PonWrt (Build PonWrt single thread)
         if: ${{inputs.multithreading == false}}
-        working-directory: ImmortalWrt
+        working-directory: PonWrt
         run: make -j1 V=s
 
       - name: 上传编译结果到 Artifact (Upload build result to Artifact)
         uses: actions/upload-artifact@v4
         with:
-          name: ImmortalWrt-build-result
-          path: ImmortalWrt/bin/targets
+          name: PonWrt-build-result
+          path: PonWrt/bin/targets

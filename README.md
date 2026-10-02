@@ -1,4 +1,4 @@
-# ImmortalWrt 自动编译
+# PonWrt 自动编译
 
 ## 使用步骤
 
@@ -8,12 +8,12 @@
 2. (必须) 上传 `.config` 文件与 `feeds.conf.default` 文件到此仓库
 3. (可选) 编辑仓库内的 `diy.sh` 文件，可以自定义编译前的命令，一般使用 git clone 来克隆需要使用到的第三方插件
 4. - 进入本仓库的 Actions 页面
-   - 在左侧选择 `🚀 编译 (Build)`
+   - 在左侧选择 `🚀 编译 PonWrt (Build PonWrt)`
    - 右侧点击 Run workflow
-   - 填入需要编译的仓库的信息
+   - 填入需要编译的 PonWrt 仓库信息，默认使用 `pbs05/ponwrt` 的 `master` 分支
    - 最后点击绿色的 Run workflow![run-workflow](img/run-workflow.png)
 5. 等待编译完成，大约需要 2-3 小时
-6. ![Build success](img/build-success.png)当页面像这样显示绿色的✅的时候，就说明编译完成了，点击进去到这个界面![build-result](img/build-result.png)找到 ImmortalWrt-build-result ，就是编译后的固件了。直接点击下载就可以
+6. ![Build success](img/build-success.png)当页面像这样显示绿色的✅的时候，就说明编译完成了，点击进去到这个界面![build-result](img/build-result.png)找到 PonWrt-build-result ，就是编译后的固件了。直接点击下载就可以
 
 ### 通过 SSH 连接到 Github Actions 进行编译
 
@@ -26,9 +26,9 @@
 3. (可选) 编辑仓库内的 `diy.sh` 文件，可以自定义编译前的命令，一般使用 git clone 来克隆需要使用到的第三方插件
 
 4. - 进入本仓库的 Actions 页面
-   - 在左侧选择 `🚀 编译 (Build)`
+   - 在左侧选择 `🚀 编译 PonWrt (Build PonWrt)`
    - 右侧点击 Run workflow
-   - 填入需要编译的仓库的信息
+   - 填入需要编译的 PonWrt 仓库信息
    - 把 **使用 ssh 连接到编译环境** 勾选上
    - 最后点击绿色的 Run workflow![ssh-run](img/ssh-run.png)
 
@@ -41,7 +41,7 @@
 8. 连接成功以后，执行以下命令
 
    ```shell
-   cd ImmortalWrt && ./scripts/feeds update -a && ./scripts/feeds install -a && make menuconfig
+   cd PonWrt && ./scripts/feeds update -a && ./scripts/feeds install -a && make menuconfig
    ```
 
 9. 根据自己的需要来定制 config![make-config](img/make-config.png)
@@ -50,7 +50,7 @@
 
 11. 等待编译完成，大约需要 2-3 小时
 
-12. ![Build success](img/build-success.png)当页面像这样显示绿色的✅的时候，就说明编译完成了，点击进去到这个界面![build-result](img/build-result.png)找到 ImmortalWrt-build-result ，就是编译后的固件了。直接点击下载就可以
+12. ![Build success](img/build-success.png)当页面像这样显示绿色的✅的时候，就说明编译完成了，点击进去到这个界面![build-result](img/build-result.png)找到 PonWrt-build-result ，就是编译后的固件了。直接点击下载就可以
 
 ## 如何定制 config 和 feeds：
 
