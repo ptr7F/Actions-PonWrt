@@ -109,7 +109,7 @@ jobs:
           path: PonWrt
 
       - name: 开启 SSH 服务 (Start SSH service)
-        uses: lhotari/action-upterm@v1
+        uses: owenthereal/action-upterm@v2
         with:
           wait-timeout-minutes: 20
 
